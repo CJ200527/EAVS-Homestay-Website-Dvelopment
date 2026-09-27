@@ -1,0 +1,26 @@
+/* EAV admin theme: matches landing (ocean + cream + Georgia serif), offline */
+:root{--ocean:#0A4A7A;--ocean2:#0E6BA8;--cream:#FFF8EC;--wood:#C8A97E;--ink:#1a2a3a;--gray:#f4f1ea;}
+body{background:#f6fafd;color:var(--ink);font-family:'Segoe UI',Arial,sans-serif;}
+.serif{font-family:Georgia,'Times New Roman',serif;}
+.ad-side{position:fixed;inset:0 auto 0 0;width:230px;background:linear-gradient(180deg,var(--ocean),#07355a);color:#fff;padding:1.2rem .9rem;z-index:100;}
+.ad-side .ad-brand{color:#fff;font-size:1.4rem;text-decoration:none;display:block;margin-bottom:1rem;}
+.ad-side nav a{display:block;color:#dbe9f5;text-decoration:none;padding:.6rem .8rem;border-radius:.5rem;margin:.15rem 0;font-size:.95rem;}
+.ad-side nav a:hover{background:rgba(255,255,255,.12);color:#fff;}
+.ad-side nav a.on{background:var(--cream);color:var(--ocean);font-weight:700;}
+.ad-side nav a.out{color:#ffb3b3;}
+.ad-main{margin-left:230px;min-height:100vh;}
+.ad-head{display:flex;justify-content:space-between;align-items:center;background:#fff;border-bottom:1px solid #e9e2d5;padding:1rem 1.5rem;position:sticky;top:0;z-index:50;}
+.ad-user{display:flex;align-items:center;gap:.6rem;}
+.ad-user .avatar{width:44px;height:44px;border-radius:50%;background:var(--ocean);color:var(--cream);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.2rem;}
+.ad-body{padding:1.5rem;}
+.kpi{background:#fff;border:1px solid #e9e2d5;border-radius:.8rem;padding:1rem;height:100%;}
+.kpi .n{font-family:Georgia,serif;font-size:2rem;font-weight:700;color:var(--ocean);}
+.kpi small{text-transform:uppercase;letter-spacing:1px;color:#6b7a8d;}
+.bar-row{display:flex;align-items:center;gap:.6rem;margin:.3rem 0;}
+.bar-row .lbl{width:110px;font-size:.85rem;}
+.bar-row .bar{flex:1;background:#e9e2d5;border-radius:50px;height:14px;overflow:hidden;}
+.bar-row .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ocean),var(--ocean2));}
+.bar-row .v{width:70px;text-align:right;font-weight:700;}
+.ad-card{background:#fff;border:1px solid #e9e2d5;border-radius:.8rem;padding:1rem;margin-bottom:1rem;}
+.btn-ocean{background:var(--ocean);color:#fff;}.btn-ocean:hover{background:var(--ocean2);color:#fff;}
+@media(max-width:860px){.ad-side{position:static;width:auto;display:flex;gap:.4rem;overflow-x:auto;align-items:center;}.ad-side .ad-brand{margin:0 .6rem 0 0;white-space:nowrap;}.ad-side nav{display:flex;gap:.3rem;}.ad-side nav a{white-space:nowrap;}.ad-main{margin-left:0;}}
