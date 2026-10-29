@@ -3,8 +3,12 @@ function openAdminCurtain(){const c=document.getElementById('adminCurtain');if(!
 function closeAdminCurtain(){const c=document.getElementById('adminCurtain');if(!c)return;if(!c.classList.contains('open')&&!c.classList.contains('closing'))return;c.classList.remove('open');c.classList.add('closing');c.setAttribute('aria-hidden','true');setTimeout(()=>{c.classList.remove('closing');document.body.classList.remove('curtain-lock');},580);}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAdminCurtain();});
 document.getElementById('adminCurtain')?.addEventListener('click',e=>{if(e.target.classList?.contains('curtain-shade'))closeAdminCurtain();});
-// Availability checker + price estimator + proof toggle
+// Availability checker + price estimator
+// The booking page (booking.php) ships its own richer availability strip and
+// price breakdown, and binds them to the same change events. Guard so the two
+// do not fight over #availMsg / #totalHint. (v0.12.3)
 async function checkAvail(){
+  if(document.getElementById('bookForm')) return;   // booking.php owns these
   const ci=document.getElementById('check_in')?.value, co=document.getElementById('check_out')?.value, rm=document.getElementById('room_id')?.value;
   const box=document.getElementById('availMsg'); if(!box) return;
   if(!ci||!co||!rm){box.innerHTML='';return;}
@@ -13,8 +17,5 @@ async function checkAvail(){
   const t=document.getElementById('totalHint'); if(t&&r.total_formatted) t.textContent='Estimated total: '+r.total_formatted;
 }
 ['check_in','check_out','room_id'].forEach(id=>document.getElementById(id)?.addEventListener('change',checkAvail));
-function toggleProof(){
-  const m=document.getElementById('payment_method')?.value;
-  document.getElementById('proofWrap').style.display=(m==='Cash')?'none':'block';
-}
-document.getElementById('payment_method')?.addEventListener('change',toggleProof); toggleProof();
+// Payment proof is required for EVERY method now (cash included), so there is no
+// show/hide toggle left to run here.

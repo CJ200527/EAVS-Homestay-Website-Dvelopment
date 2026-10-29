@@ -1,4 +1,8 @@
-<?php require 'includes/header.php'; ?>
+<?php require 'config/db.php'; require 'config/helpers.php'; require 'includes/header.php';
+$siteRooms = [];
+try { $siteRooms = $conn->query("SELECT * FROM rooms WHERE status='active' ORDER BY id")->fetch_all(MYSQLI_ASSOC); } catch (Exception $e) { $siteRooms = []; }
+$nRooms = count($siteRooms);
+?>
 <!-- HERO (Telly-style full-bleed) -->
 <section class="telly-hero">
   <img class="bg" src="assets/images/outside/528041068_122133605528410695_6982286475227622801_n.jpg" alt="Oceanfront homestay">
@@ -6,7 +10,7 @@
   <div class="container content">
     <span class="eyebrow">Best Homestay With Cozy Rooms • Camiguin</span>
     <h1 class="banner-title serif">Just Experience A New Level of Island Calm.</h1>
-    <p class="fs-5">Oceanfront stay • Large grassy lawn • 2 spacious units • Free 1-day scooter on Room 1.</p>
+    <p class="fs-5">Oceanfront stay • Large grassy lawn • <?php echo $nRooms; ?> spacious unit<?php echo $nRooms===1?'':'s'; ?> • Free 1-day scooter on Room 1.</p>
     <a href="rooms.php" class="btn btn-outline-cream btn-pill btn-arrow"><span>Explore Rooms</span></a>
     <a href="booking.php" class="btn btn-warning btn-pill btn-arrow ms-2"><span>Book Now</span></a>
   </div>
@@ -55,20 +59,16 @@
 <section id="our-rooms" class="section section-gray"><div class="container">
   <div class="d-flex justify-content-between align-items-center mb-3"><h2 class="serif">Explore Our Rooms</h2><a href="rooms.php" class="btn btn-outline-ink btn-pill btn-arrow btn-sm"><span>View All Rooms</span></a></div>
   <div class="row g-3">
+    <?php foreach($siteRooms as $sr): ?>
     <div class="col-md-6"><div class="room-card">
-      <img src="assets/images/room1/537256849_122134520288410695_3908963705729607760_n.jpg" alt="Room 1">
-      <div class="p-3"><h3 class="serif">Room 1 — Brown Unit</h3>
-        <table class="spec-table"><tr><td><b>Price:</b></td><td class="price"><b>₱3,000</b> /night</td></tr><tr><td><b>Capacity:</b></td><td>Up to 6 guests</td></tr><tr><td><b>Bed:</b></td><td>Wooden bunk beds</td></tr><tr><td><b>Services:</b></td><td>AC, TV, dispenser, dining + FREE scooter</td></tr></table>
-        <a href="room-details.php?id=1" class="btn btn-dark btn-pill btn-sm mt-2">More Details</a> <a href="booking.php?room_id=1" class="btn btn-ocean btn-pill btn-sm mt-2">Book</a>
+      <img src="<?php echo esc($sr['image_urls']); ?>" alt="<?php echo esc($sr['room_name']); ?>">
+      <div class="p-3"><h3 class="serif"><?php echo esc($sr['room_name']); ?></h3>
+        <table class="spec-table"><tr><td><b>Price:</b></td><td class="price"><b><?php echo peso($sr['price_per_night']); ?></b> /night</td></tr><tr><td><b>Capacity:</b></td><td>Up to <?php echo (int)$sr['capacity']; ?> guests</td></tr></table>
+        <a href="room-details.php?id=<?php echo $sr['id']; ?>" class="btn btn-dark btn-pill btn-sm mt-2">More Details</a> <a href="booking.php?room_id=<?php echo $sr['id']; ?>" class="btn btn-ocean btn-pill btn-sm mt-2">Book</a>
       </div>
     </div></div>
-    <div class="col-md-6"><div class="room-card">
-      <img src="assets/images/room2/538113582_122134519310410695_8735526467688003549_n.jpg" alt="Room 2">
-      <div class="p-3"><h3 class="serif">Room 2 — Blue Unit</h3>
-        <table class="spec-table"><tr><td><b>Price:</b></td><td class="price"><b>₱3,000</b> /night</td></tr><tr><td><b>Capacity:</b></td><td>Up to 6 guests</td></tr><tr><td><b>Bed:</b></td><td>Queen + bunks</td></tr><tr><td><b>Services:</b></td><td>AC, TV, mini-fridge, dispenser, dining</td></tr></table>
-        <a href="room-details.php?id=2" class="btn btn-dark btn-pill btn-sm mt-2">More Details</a> <a href="booking.php?room_id=2" class="btn btn-ocean btn-pill btn-sm mt-2">Book</a>
-      </div>
-    </div></div>
+    <?php endforeach; ?>
+    <?php if(!$siteRooms): ?><p class="text-muted">Rooms opening soon — contact us to book.</p><?php endif; ?>
   </div>
 </div></section>
 
@@ -77,7 +77,7 @@
   <form action="booking.php" method="get" class="booking-bar d-flex flex-wrap align-items-end justify-content-around p-4 gap-3">
     <div><label>Arrival</label><input type="date" name="check_in" class="form-control" required min="<?php echo date('Y-m-d'); ?>"></div>
     <div><label>Departure</label><input type="date" name="check_out" class="form-control" required></div>
-    <div><label>Room</label><select name="room_id" class="form-select"><option value="1">Room 1 Brown</option><option value="2">Room 2 Blue</option></select></div>
+    <div><label>Room</label><select name="room_id" class="form-select"><?php foreach($siteRooms as $sr): ?><option value="<?php echo $sr['id']; ?>"><?php echo esc($sr['room_name']); ?></option><?php endforeach; ?></select></div>
     <div><label>Guests</label><input type="number" name="guests" value="2" min="1" max="10" class="form-control"></div>
     <button class="btn btn-dark btn-pill btn-arrow"><span>Check availability</span></button>
   </form>

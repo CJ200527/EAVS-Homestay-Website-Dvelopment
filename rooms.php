@@ -1,5 +1,5 @@
 <?php require 'config/db.php'; require 'config/helpers.php'; require 'includes/header.php';
-$rooms = $conn->query("SELECT * FROM rooms ORDER BY id")->fetch_all(MYSQLI_ASSOC);
+$rooms = $conn->query("SELECT * FROM rooms WHERE status='active' ORDER BY id")->fetch_all(MYSQLI_ASSOC);
 ?>
 <!-- TELLY-STYLE BANNER -->
 <section class="telly-hero" style="min-height:44vh">

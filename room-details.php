@@ -1,7 +1,7 @@
 <?php require 'config/db.php'; require 'config/helpers.php';
 $id = (int)($_GET['id'] ?? 1);
 $st = $conn->prepare("SELECT * FROM rooms WHERE id=?"); $st->bind_param('i',$id); $st->execute();
-$room = $st->get_result()->fetch_assoc(); if(!$room) die('Room not found');
+$room = $st->get_result()->fetch_assoc(); if(!$room||($room['status']??'active')!=='active') die('Room not available');
 require 'includes/header.php';
 $g1 = glob('assets/images/room1/*.jpg'); $g2 = glob('assets/images/room2/*.jpg');
 $gal = ($id==1)?$g1:$g2;

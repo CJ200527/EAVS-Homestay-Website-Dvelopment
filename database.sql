@@ -12,25 +12,33 @@ CREATE TABLE IF NOT EXISTS rooms (
   price_per_night DECIMAL(10,2) NOT NULL DEFAULT 3000.00,
   description TEXT,
   image_urls TEXT,
+  status ENUM('pending','active') NOT NULL DEFAULT 'pending',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Bookings Table
+-- v0.12 "Instant Reservation": booking_status 'Confirmed' replaces the old
+-- Pending/Approved pair. A booking reserves its dates immediately (no admin
+-- approval), which is what stops two guests paying for the same night.
+-- email column removed: we no longer collect guest email addresses.
+-- reservation_fee (non-refundable) + amount_paid make the cancellation refund
+-- rule computable instead of a guess.
 CREATE TABLE IF NOT EXISTS bookings (
   id INT AUTO_INCREMENT PRIMARY KEY,
   room_id INT NOT NULL,
   guest_name VARCHAR(150) NOT NULL,
   phone VARCHAR(50) NOT NULL,
-  email VARCHAR(150) NOT NULL,
   num_guests INT NOT NULL DEFAULT 1,
   check_in DATE NOT NULL,
   check_out DATE NOT NULL,
   total_amount DECIMAL(10,2) NOT NULL DEFAULT 0,
+  reservation_fee DECIMAL(10,2) NOT NULL DEFAULT 1000.00,
+  amount_paid DECIMAL(10,2) NOT NULL DEFAULT 0.00,
   payment_type ENUM('Advance','Full') NOT NULL DEFAULT 'Advance',
   payment_method ENUM('Cash','GCash','Maya') NOT NULL DEFAULT 'Cash',
-  payment_status ENUM('Pending','Advance Paid','Fully Paid') NOT NULL DEFAULT 'Pending',
+  payment_status ENUM('Unpaid','Part Paid','Fully Paid') NOT NULL DEFAULT 'Unpaid',
   proof_image VARCHAR(255) DEFAULT NULL,
-  booking_status ENUM('Pending','Approved','Declined','Completed','CheckedIn','CheckedOut') NOT NULL DEFAULT 'Pending',
+  booking_status ENUM('Confirmed','Declined','Completed','CheckedIn','CheckedOut') NOT NULL DEFAULT 'Confirmed',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE,
   INDEX idx_room_dates (room_id, check_in, check_out),
@@ -49,9 +57,9 @@ CREATE TABLE IF NOT EXISTS admins (
 
 -- Seed Rooms (both P3000 for now, Room 2 package TBD)
 -- Fixed IDs so re-import does not create duplicates
-INSERT INTO rooms (id, room_name, color, capacity, price_per_night, description, image_urls) VALUES
-(1, 'Room 1 - Brown Unit', 'Brown', 6, 3000.00, 'Large-capacity brown unit with wooden bunk beds, air conditioning, flat-screen TV, hot/cold water dispenser, private dining setup. Base package includes FREE 1-day scooter rental.', 'assets/images/room1/537256849_122134520288410695_3908963705729607760_n.jpg'),
-(2, 'Room 2 - Blue Unit', 'Blue', 6, 3000.00, 'Large-capacity blue unit with queen bed, air conditioning, flat-screen TV, mini-fridge, hot/cold water dispenser, private wooden dining setup. Package to be updated.', 'assets/images/room2/538113582_122134519310410695_8735526467688003549_n.jpg')
+INSERT INTO rooms (id, room_name, color, capacity, price_per_night, description, image_urls, status) VALUES
+(1, 'Room 1 - Brown Unit', 'Brown', 6, 3000.00, 'Large-capacity brown unit with wooden bunk beds, air conditioning, flat-screen TV, hot/cold water dispenser, private dining setup. Base package includes FREE 1-day scooter rental.', 'assets/images/room1/537256849_122134520288410695_3908963705729607760_n.jpg', 'active'),
+(2, 'Room 2 - Blue Unit', 'Blue', 6, 3000.00, 'Large-capacity blue unit with queen bed, air conditioning, flat-screen TV, mini-fridge, hot/cold water dispenser, private wooden dining setup. Package to be updated.', 'assets/images/room2/538113582_122134519310410695_8735526467688003549_n.jpg', 'active')
 ON DUPLICATE KEY UPDATE room_name=VALUES(room_name), price_per_night=VALUES(price_per_night), description=VALUES(description);
 
 -- Seed Admin: username=admin password=123 (real bcrypt hash for '123', owner role)

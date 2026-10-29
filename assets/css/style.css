@@ -3,7 +3,16 @@ body{background:#fff;color:var(--ink);font-family:'Segoe UI',Arial,sans-serif;}
 h1,h2,h3,.serif{font-family:Georgia,'Times New Roman',serif;letter-spacing:.2px;}
 /* Telly-like top nav */
 .eav-nav{background:#fff!important;border-bottom:1px solid #e9e2d5;}
-.eav-nav .navbar-brand{color:var(--ocean)!important;font-family:Georgia,serif;font-size:1.4rem;}
+.eav-nav .navbar-brand{color:var(--ocean)!important;font-family:Georgia,serif;font-size:1.4rem;display:flex;align-items:center;gap:.5rem;}
+.brand-logo{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #fff;box-shadow:0 2px 8px rgba(10,74,122,.3);}
+.login-logo{width:72px;height:72px;border-radius:50%;object-fit:cover;display:block;margin:0 auto .6rem;border:3px solid #fff;box-shadow:0 4px 14px rgba(10,74,122,.35);}
+/* Receipt modal buttons: white text in every state (never inline-JS backgrounds) */
+.btn-receipt-save{background:#8e6cc8;color:#fff;}
+.btn-receipt-save:hover{background:#a685e0;color:#fff;}
+.btn-receipt-confirm{background:#1e8e5a;color:#fff;}
+.btn-receipt-confirm:hover{background:#27ae6f;color:#fff;}
+.btn-receipt-close{background:var(--ocean);color:#fff;}
+.btn-receipt-close:hover{background:#0E6BA8;color:#fff;}
 .eav-nav .nav-link{color:var(--ink)!important;text-transform:uppercase;font-size:.82rem;letter-spacing:1.2px;margin:0 .4rem;}
 .eav-nav .nav-link:hover{color:var(--ocean2)!important;}
 .eav-nav .navbar-toggler{background:var(--ocean);}
@@ -50,3 +59,19 @@ h1,h2,h3,.serif{font-family:Georgia,'Times New Roman',serif;letter-spacing:.2px;
 #adminCurtain .curtain-shade{position:absolute;inset:0;background:linear-gradient(120deg,rgba(6,38,62,.85),rgba(10,74,122,.55));}
 #adminCurtain .curtain-card{position:relative;max-width:420px;width:min(420px,calc(100% - 2rem));margin:0;background:#fff;border-radius:1rem;padding:2.2rem;box-shadow:0 20px 60px rgba(0,0,0,.35);max-height:86vh;overflow:auto;}
 body.curtain-lock{overflow:hidden;}
+
+/* ---- Guest notifications: centered pop-up toasts (v0.12.2) -----------------
+   The guest site is light, so these deliberately do NOT reuse the admin's dark
+   toasts. Centered top of the viewport, stacked, click to dismiss.
+   Errors linger longer (8s via JS) than info/success (4s). */
+.toast-wrap{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:1090;display:flex;flex-direction:column;align-items:center;gap:.5rem;pointer-events:none;width:min(560px,92vw);}
+.eav-toast{pointer-events:auto;display:flex;align-items:flex-start;gap:.6rem;width:100%;padding:.8rem 1rem;border-radius:.8rem;font-size:.92rem;line-height:1.45;border:1px solid;box-shadow:0 12px 32px rgba(10,74,122,.22);animation:eavToastIn .35s cubic-bezier(.175,.885,.32,1.275);}
+.eav-toast.out{animation:eavToastOut .35s ease forwards;}
+.eav-toast-info{background:#eef7fd;border-color:#c9e2f3;color:#0d3f5e;}
+.eav-toast-danger{background:#fdf3f3;border-color:#f3cfd2;color:#8a1c24;}
+.eav-toast-success{background:#eefaf1;border-color:#c6e9d2;color:#14562c;}
+.eav-toast .x{margin-left:auto;background:none;border:0;color:inherit;opacity:.55;cursor:pointer;font-size:1.05rem;line-height:1;padding:0 2px;flex-shrink:0;}
+.eav-toast .x:hover{opacity:1;}
+@keyframes eavToastIn{from{opacity:0;transform:translateY(-14px) scale(.97);}to{opacity:1;transform:none;}}
+@keyframes eavToastOut{to{opacity:0;transform:translateY(-14px) scale(.97);}}
+@media (prefers-reduced-motion: reduce){.eav-toast,.eav-toast.out{animation:none;}}

@@ -5,14 +5,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EAV's Homestay - Camiguin</title>
-<link href="assets/vendor/bootstrap.min.css?v=20251001" rel="stylesheet">
+<link rel="icon" href="assets/images/logo.jpg">
+<link href="assets/vendor/bootstrap.min.css?v=20251017" rel="stylesheet">
 <!-- Offline mode: local Bootstrap. CDN fallback (needs internet): https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css -->
-<link href="assets/css/style.css?v=20251001" rel="stylesheet">
+<link href="assets/css/style.css?v=20251017" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg sticky-top eav-nav">
   <div class="container-fluid px-4">
-    <a class="navbar-brand fw-bold" href="index.php">🌊 EAV's Homestay</a>
+    <a class="navbar-brand fw-bold" href="index.php"><img src="assets/images/logo.jpg" alt="EAV's Homestay logo" class="brand-logo"> EAV's Homestay</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="nav">
       <ul class="navbar-nav mx-auto">
